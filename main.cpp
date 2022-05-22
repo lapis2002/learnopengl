@@ -11,16 +11,15 @@ void checkCompileProgram(unsigned int program);
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
 
-float vertices[] = {
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+float firstTriangle[] = {
+        -0.9f, -0.5f, 0.0f,  // left 
+        -0.0f, -0.5f, 0.0f,  // right
+        -0.45f, 0.5f, 0.0f,  // top 
 };
-
-unsigned int indices[] = {  // note that we start from 0!
-    0, 1, 3,   // first triangle
-    1, 2, 3    // second triangle
+float secondTriangle[] = {
+    0.0f, -0.5f, 0.0f,  // left
+    0.9f, -0.5f, 0.0f,  // right
+    0.45f, 0.5f, 0.0f   // top 
 };
 
 const char* vertexShaderSource = "#version 330 core\n"
@@ -96,45 +95,38 @@ int main() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    unsigned int VBO, VAO, EBO;
-    // subsequent vertex attribute calls from that point on will be stored inside the VAO
-    /*
-    VAO stores:
-        Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.
-        Vertex attribute configurations via glVertexAttribPointer.
-        Vertex buffer objects associated with vertex attributes by calls to glVertexAttribPointer.
-    */
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    unsigned int VBO[2], VAO[2];
 
-    // bind Vertex Array Object
-    glBindVertexArray(VAO);
+    // First triangle
+    glGenVertexArrays(1, &VAO[0]);
+    glGenBuffers(1, &VBO[0]);
 
-    // copy vertices array in buffer for OpenGL to use
-    // OpenGL allows us to bind to several buffers at once as long as they have a different buffer type. 
-    /*
-    GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-    GL_STATIC_DRAW: the data is set only once and used many times.
-    GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
-    */
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);     // !buffer type of a vertex buffer
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);      // copy user-defined data into the currently bound buffer
+    glBindVertexArray(VAO[0]);
 
-    //  bind the corresponding EBO each time rendering an object with indices
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);    // indices
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
+    
+    // set the vertex attribute pointer
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+
+    // Second triangle
+    glGenVertexArrays(1, &VAO[1]);
+    glGenBuffers(1, &VBO[1]);
+
+    glBindVertexArray(VAO[1]);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
 
     // set the vertex attribute pointer
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    //!!  NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-    
-    // unbind VAO
     glBindVertexArray(0);
+
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -147,11 +139,13 @@ int main() {
         glUseProgram(shaderProgram);
 
         // draw the object
-        // bind the VAO with the preferred settings before drawing the object 
-        glBindVertexArray(VAO);
-        
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);    // draw using indices specified in EBO
+        // first triangle
+        glBindVertexArray(VAO[0]);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // second triangle
+        glBindVertexArray(VAO[1]);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // swap the color buffer
         // swap the back buffer to the front buffer so the image can be displayed without still being rendered to, 
@@ -165,9 +159,10 @@ int main() {
     }
 
     //  de-allocate all resources
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &VAO[0]);
+    glDeleteBuffers(1, &VBO[0]);
+    glDeleteVertexArrays(1, &VAO[1]);
+    glDeleteBuffers(1, &VBO[1]);
     glDeleteProgram(shaderProgram);
 
     glfwTerminate();    
