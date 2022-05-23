@@ -72,22 +72,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -96,6 +96,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -111,6 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,8 +155,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="commons\src\shader.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="commons\includes\shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\shader.frag" />
+    <None Include="shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
