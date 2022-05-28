@@ -74,21 +74,25 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\includes;C:\Users\Hang Duong\Documents\openGL\learnopengl\includes;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Hang Duong\Documents\openGL\learnopengl\libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>C:\Users\Hang Duong\Documents\openGL\learnopengl\commons\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,10 +165,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commons\includes\shader.h" />
+    <ClInclude Include="commons\includes\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\shader.frag" />
     <None Include="shaders\shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\awesomeface.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </Image>
+    <Image Include="textures\container.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
