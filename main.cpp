@@ -9,7 +9,7 @@
 #include <shader.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+void processInput(GLFWwindow* window, float* mixValue);
 
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
@@ -174,8 +174,11 @@ int main() {
     shaderProgram.setInt("texture1", 0);
     shaderProgram.setInt("texture2", 1);
 
+    float mixValue = 0.2f;
+    
+
     while (!glfwWindowShouldClose(window)) {
-        processInput(window);
+        processInput(window, &mixValue);
 
         // rendering
         // clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor. 
@@ -198,6 +201,9 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
+
+        // update
+        shaderProgram.setFloat("mixValue", mixValue);
 
         // draw the object
         // bind the VAO with the preferred settings before drawing the object 
@@ -229,7 +235,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window) {
+void processInput(GLFWwindow* window, float* mixValue) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS && *mixValue > 0.f) {
+        *mixValue -= 0.1f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && *mixValue < 1.f) {
+        *mixValue += 0.1f;
+    }
 }
 
