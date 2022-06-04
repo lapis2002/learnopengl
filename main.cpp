@@ -4,9 +4,15 @@
 #include <GLFW/glfw3.h>
 #include "stb_image.h"
 
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <iostream>
 
 #include <shader.h>
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -199,9 +205,25 @@ int main() {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
+        glm::mat4 transfomMat = glm::mat4(1.f);
+        transfomMat = glm::translate(transfomMat, glm::vec3(0.5f, -0.5f, 0.f));
+        transfomMat = glm::rotate(transfomMat, (float)glfwGetTime(), glm::vec3(0.f, 0.f, 1.f));
+        transfomMat = glm::scale(transfomMat, glm::vec3(0.5f, 0.5f, 0.5f));
+
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram.id, "transformMat");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transfomMat));
+
         // draw the object
         // bind the VAO with the preferred settings before drawing the object 
         glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        transfomMat = glm::mat4(1.f);
+        transfomMat = glm::translate(transfomMat, glm::vec3(-0.5f, 0.5f, 0.f));
+        transfomMat = glm::scale(transfomMat, glm::vec3(abs(glm::sin(glm::radians((float)glfwGetTime() * 90))), abs(glm::sin(glm::radians((float)glfwGetTime() * 90))), 0.5f));
+
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transfomMat));
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // swap the color buffer
