@@ -4,6 +4,10 @@
 #include <GLFW/glfw3.h>
 #include "stb_image.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <iostream>
 
 #include <shader.h>
@@ -198,6 +202,15 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
+
+        // transform matrix
+        glm::mat4 transfomMat = glm::mat4(1.f);
+        transfomMat = glm::translate(transfomMat, glm::vec3(0.5f, -0.5f, 0.f));
+        transfomMat = glm::rotate(transfomMat, (float)glfwGetTime(), glm::vec3(0.f, 0.f, 1.f));
+        transfomMat = glm::scale(transfomMat, glm::vec3(0.5f, 0.5f, 0.5f));
+
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram.id, "transformMat");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transfomMat));
 
         // draw the object
         // bind the VAO with the preferred settings before drawing the object 
