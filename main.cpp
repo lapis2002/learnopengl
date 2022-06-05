@@ -178,6 +178,19 @@ int main() {
     shaderProgram.setInt("texture1", 0);
     shaderProgram.setInt("texture2", 1);
 
+    // transform matrices
+    glm::mat4 modelMat = glm::mat4(1.f);
+    glm::mat4 viewMat = glm::mat4(1.f);
+    glm::mat4 projMat = glm::mat4(1.f);
+
+    modelMat = glm::rotate(modelMat, glm::radians(-55.f), glm::vec3(1.f, 0.f, 0.f));
+    viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, -3.f));
+    projMat = glm::perspective(glm::radians(45.f), static_cast<float> (WIDTH) / static_cast<float> (HEIGHT), 0.1f, 100.f);
+
+    shaderProgram.setMat4("modelMat", modelMat);
+    shaderProgram.setMat4("viewMat", viewMat);
+    shaderProgram.setMat4("projMat", projMat);
+
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -203,14 +216,7 @@ int main() {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
-        // transform matrix
-        glm::mat4 transfomMat = glm::mat4(1.f);
-        transfomMat = glm::translate(transfomMat, glm::vec3(0.5f, -0.5f, 0.f));
-        transfomMat = glm::rotate(transfomMat, (float)glfwGetTime(), glm::vec3(0.f, 0.f, 1.f));
-        transfomMat = glm::scale(transfomMat, glm::vec3(0.5f, 0.5f, 0.5f));
-
-        unsigned int transformLoc = glGetUniformLocation(shaderProgram.id, "transformMat");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transfomMat));
+        
 
         // draw the object
         // bind the VAO with the preferred settings before drawing the object 
