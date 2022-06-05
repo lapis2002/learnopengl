@@ -19,31 +19,47 @@ const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
 
 float vertices[] = {
-    // positions          // colors           // texture coords
-     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-};
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
-};
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-/* color changing triangle
-float vertices[] = {
-    // positions         // colors
-     0.5f, -0.5f, 0.0f,  
-    -0.5f, -0.5f, 0.0f,  
-     0.0f,  0.5f, 0.0f
-};
-*/
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-float texCoords[] = {
-    0.0f, 0.0f,  // lower-left corner  
-    1.0f, 0.0f,  // lower-right corner
-    0.5f, 1.0f   // top-center corner
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
 int main() {
@@ -72,10 +88,22 @@ int main() {
     glViewport(0, 0, WIDTH, HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    // glad: load all OpenGL function pointers
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+    // configure global opengl state
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    glEnable(GL_DEPTH_TEST);
+    
     // SHADER
+    // -------------------------------------------------------------------------------------------------------------------------------------
     Shader shaderProgram = Shader("shaders/shader.vert", "shaders/shader.frag");
    
-    unsigned int VBO, VAO, EBO;
+    unsigned int VBO, VAO;
     // subsequent vertex attribute calls from that point on will be stored inside the VAO
     /*
     VAO stores:
@@ -85,7 +113,6 @@ int main() {
     */
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
     // bind Vertex Array Object
     glBindVertexArray(VAO);
@@ -100,33 +127,31 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);     // !buffer type of a vertex buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);      // copy user-defined data into the currently bound buffer
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
     // set the vertex attribute pointer
+    // -------------------------------------------------------------------------------------------------------------------------------------
     // location
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-
     // texture
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)) /* stride 6 offsets*/);
-    glEnableVertexAttribArray(2);
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)) /* stride 6 offsets*/);
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     //!!  NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
     
     // unbind VAO
+    // -------------------------------------------------------------------------------------------------------------------------------------
     glBindVertexArray(0);
 
     // draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // TEXTURES
+    // -------------------------------------------------------------------------------------------------------------------------------------
     unsigned int texture1, texture2;
 
     int texWidth, texHeight, numColorChannels;
@@ -179,25 +204,26 @@ int main() {
     shaderProgram.setInt("texture2", 1);
 
     // transform matrices
+    // -------------------------------------------------------------------------------------------------------------------------------------
     glm::mat4 modelMat = glm::mat4(1.f);
     glm::mat4 viewMat = glm::mat4(1.f);
     glm::mat4 projMat = glm::mat4(1.f);
 
-    modelMat = glm::rotate(modelMat, glm::radians(-55.f), glm::vec3(1.f, 0.f, 0.f));
-    viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, -3.f));
-    projMat = glm::perspective(glm::radians(45.f), static_cast<float> (WIDTH) / static_cast<float> (HEIGHT), 0.1f, 100.f);
-
-    shaderProgram.setMat4("modelMat", modelMat);
     shaderProgram.setMat4("viewMat", viewMat);
     shaderProgram.setMat4("projMat", projMat);
 
+    viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, -3.f));
+    projMat = glm::perspective(glm::radians(45.f), static_cast<float> (WIDTH) / static_cast<float> (HEIGHT), 0.1f, 100.f);
+
+    // -------------------------------------------------------------------------------------------------------------------------------------
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
         // rendering
+        // -------------------------------------------------------------------------------------------------------------------------------------
         // clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor. 
         glClearColor(0.2f, 0.3f, 0.3f, 0.1f);   // !state-setting function
-        glClear(GL_COLOR_BUFFER_BIT);           // !state-using function
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);           // !state-using function
 
         // use shader program to render object
         shaderProgram.use();
@@ -211,19 +237,24 @@ int main() {
         */
 
         // bind the texture
+        // -------------------------------------------------------------------------------------------------------------------------------------
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
-        
+        // -------------------------------------------------------------------------------------------------------------------------------------
+        modelMat = glm::rotate(modelMat, static_cast<float>(glfwGetTime() * glm::radians(5.f)), glm::vec3(0.5f, 1.f, 0.f));
+        shaderProgram.setMat4("modelMat", modelMat);
 
         // draw the object
+        // -------------------------------------------------------------------------------------------------------------------------------------
         // bind the VAO with the preferred settings before drawing the object 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // swap the color buffer
+        // -------------------------------------------------------------------------------------------------------------------------------------
         // swap the back buffer to the front buffer so the image can be displayed without still being rendered to, 
         // removing all the aforementioned artifacts. 
         glfwSwapBuffers(window);
@@ -235,6 +266,7 @@ int main() {
     }
 
     //  de-allocate all resources
+    // -------------------------------------------------------------------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
