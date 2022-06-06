@@ -24,12 +24,18 @@
     <ClCompile Include="commons\src\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="commons\src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commons\includes\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="commons\includes\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="commons\includes\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

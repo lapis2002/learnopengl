@@ -159,11 +159,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="commons\src\Camera.cpp" />
     <ClCompile Include="commons\src\shader.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="commons\includes\Camera.h" />
     <ClInclude Include="commons\includes\shader.h" />
     <ClInclude Include="commons\includes\stb_image.h" />
   </ItemGroup>
