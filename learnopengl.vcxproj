@@ -170,8 +170,10 @@
     <ClInclude Include="commons\includes\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\shader.frag" />
-    <None Include="shaders\shader.vert" />
+    <None Include="shaders\cubeShader.frag" />
+    <None Include="shaders\cubeShader.vert" />
+    <None Include="shaders\lightSourceShader.frag" />
+    <None Include="shaders\lightSourceShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\awesomeface.png">
