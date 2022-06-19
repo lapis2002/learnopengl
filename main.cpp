@@ -67,6 +67,19 @@ float vertices[] = {
     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
 
+glm::vec3 cubePositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),
+    glm::vec3(2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3(2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3(1.3f, -2.0f, -2.5f),
+    glm::vec3(1.5f,  2.0f, -2.5f),
+    glm::vec3(1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
+};
+
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 float lastX = WIDTH / 2.0f;
@@ -80,6 +93,7 @@ float lastFrame = 0.0f;
 
 // lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightDir(-0.2f, -1.0f, -0.3f);
 
 int main() {
     glfwInit();
@@ -226,16 +240,21 @@ int main() {
         // -------------------------------------------------------------------------------------------------------------------------------------
         // use shader program to render object
 
-        lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+        //lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
+        //lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+
+        lightDir.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
+        lightDir.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+
         cubeShader.use();
         
         // light
         cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
         cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
         cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
         cubeShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);
+
+        cubeShader.setVec3("light.direction", lightDir.x, lightDir.y, lightDir.z);
 
         // material
         cubeShader.setFloat("material.shininess", 128.f);
@@ -247,15 +266,28 @@ int main() {
         cubeShader.setMat4("projMat", projMat);
         cubeShader.setMat4("modelMat", modelMat);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, specularMap);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, emissionMap);
+        
 
-        glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            modelMat = glm::mat4(1.0f);
+            modelMat = glm::translate(modelMat, cubePositions[i]);
+            float angle = 20.0f * i;
+            modelMat = glm::rotate(modelMat, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            cubeShader.setMat4("modelMat", modelMat);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, diffuseMap);
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, specularMap);
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, emissionMap);
+
+            glBindVertexArray(cubeVAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+       
 
         // -------------------------------------------------------------------------------------------------------------------------------------
         modelMat = glm::mat4(1.f);
