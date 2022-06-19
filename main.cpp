@@ -240,11 +240,11 @@ int main() {
         // -------------------------------------------------------------------------------------------------------------------------------------
         // use shader program to render object
 
-        //lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        //lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+        lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
+        lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
 
-        lightDir.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        lightDir.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+        // lightDir.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
+        // lightDir.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
 
         cubeShader.use();
         
@@ -255,6 +255,11 @@ int main() {
         cubeShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);
 
         cubeShader.setVec3("light.direction", lightDir.x, lightDir.y, lightDir.z);
+
+        // light covers distance of 50
+        cubeShader.setFloat("light.constant", 1.0f);
+        cubeShader.setFloat("light.linear", 0.09f);
+        cubeShader.setFloat("light.quadratic", 0.032f);
 
         // material
         cubeShader.setFloat("material.shininess", 128.f);
