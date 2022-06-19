@@ -240,11 +240,11 @@ int main() {
         // -------------------------------------------------------------------------------------------------------------------------------------
         // use shader program to render object
 
-        lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+        //lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
+        //lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
 
-        // lightDir.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        // lightDir.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
+        //lightDir.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
+        //lightDir.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
 
         cubeShader.use();
         
@@ -252,17 +252,22 @@ int main() {
         cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
         cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
         cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        cubeShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);
+        // cubeShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);
 
-        cubeShader.setVec3("light.direction", lightDir.x, lightDir.y, lightDir.z);
+        // cubeShader.setVec3("light.direction", lightDir.x, lightDir.y, lightDir.z);
+        cubeShader.setVec3("light.position", camera.Position.x, camera.Position.y, camera.Position.z);
+        cubeShader.setVec3("light.direction", camera.Front.x, camera.Front.y, camera.Front.z);
 
         // light covers distance of 50
         cubeShader.setFloat("light.constant", 1.0f);
         cubeShader.setFloat("light.linear", 0.09f);
         cubeShader.setFloat("light.quadratic", 0.032f);
 
+        cubeShader.setFloat("light.innerCutOff", glm::cos(glm::radians(12.5f)));
+        cubeShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
         // material
-        cubeShader.setFloat("material.shininess", 128.f);
+        cubeShader.setFloat("material.shininess", 32.f);
 
         cubeShader.setVec3("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
 
@@ -293,7 +298,7 @@ int main() {
         }
 
        
-
+        /*
         // -------------------------------------------------------------------------------------------------------------------------------------
         modelMat = glm::mat4(1.f);
         modelMat = glm::translate(modelMat, lightPos);
@@ -306,7 +311,7 @@ int main() {
 
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-
+        */
         // swap the color buffer
         // -------------------------------------------------------------------------------------------------------------------------------------
         // swap the back buffer to the front buffer so the image can be displayed without still being rendered to, 
