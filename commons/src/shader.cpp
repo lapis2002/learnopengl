@@ -1,12 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <shader.h>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include <Shader.h>
 
 enum ShaderType {
 	VERTEX_SHADER,

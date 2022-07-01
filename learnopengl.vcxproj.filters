@@ -27,6 +27,12 @@
     <ClCompile Include="commons\src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="commons\src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="commons\src\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commons\includes\shader.h">
@@ -38,12 +44,23 @@
     <ClInclude Include="commons\includes\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="commons\includes\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="commons\includes\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\cubeShader.vert" />
     <None Include="shaders\cubeShader.frag" />
     <None Include="shaders\lightSourceShader.frag" />
     <None Include="shaders\lightSourceShader.vert" />
+    <None Include="resources\backpack\backpack.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\modelLoaderShader.vert" />
+    <None Include="shaders\modelLoaderShader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\awesomeface.png">
@@ -52,5 +69,25 @@
     <Image Include="textures\container.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\backpack\ao.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\backpack\diffuse.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\backpack\normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\backpack\roughness.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\backpack\specular.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\backpack\source_attribution.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
