@@ -23,62 +23,59 @@ void processInput(GLFWwindow* window);
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
 
-float vertices[] = {
-    // positions          // normals           // texture coords
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+float cubeVertices[] = {
+    // positions          // texture Coords
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
+float planeVertices[] = {
+    // positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
+     5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+    -5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
+    -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
 
-glm::vec3 cubePositions[] = {
-    glm::vec3(0.0f,  0.0f,  0.0f),
-    glm::vec3(2.0f,  5.0f, -15.0f),
-    glm::vec3(-1.5f, -2.2f, -2.5f),
-    glm::vec3(-3.8f, -2.0f, -12.3f),
-    glm::vec3(2.4f, -0.4f, -3.5f),
-    glm::vec3(-1.7f,  3.0f, -7.5f),
-    glm::vec3(1.3f, -2.0f, -2.5f),
-    glm::vec3(1.5f,  2.0f, -2.5f),
-    glm::vec3(1.5f,  0.2f, -1.5f),
-    glm::vec3(-1.3f,  1.0f, -1.5f)
+     5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+    -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+     5.0f, -0.5f, -5.0f,  2.0f, 2.0f
 };
 
 
@@ -166,31 +163,53 @@ int main() {
     // configure global opengl state
     // -------------------------------------------------------------------------------------------------------------------------------------
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     stbi_set_flip_vertically_on_load(true); // OpenGL 0.0 coordinate on the y-axis to be on the bottom side but img usually top of y axis
 
     // SHADER
     // -------------------------------------------------------------------------------------------------------------------------------------
-    Shader lightShader = Shader("shaders/lightSourceShader.vert", "shaders/lightSourceShader.frag");
-    Shader cubeShader = Shader("shaders/cubeShader.vert", "shaders/cubeShader.frag");
-    Shader modelShader = Shader("shaders/modelLoaderShader.vert", "shaders/modelLoaderShader.frag");
+    Shader shader = Shader("shaders/depthTesting.vert", "shaders/depthTesting.frag");
+    Shader stencilShader = Shader("shaders/depthTesting.vert", "shaders/singleColorShader.frag");
 
-    Model bagModel("resources/objects/backpack/backpack.obj");
-
-    unsigned int VBO, lightVAO;
-
-    // -------------------------------------------------------------------------------------------------------------------------------------
-    glGenVertexArrays(1, &lightVAO);
-    glGenBuffers(1, &VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);              // !buffer type of a vertex buffer
-    glBindVertexArray(lightVAO);                                                            // bind Vertex Array Object
-
-    // position attribute
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    // cube VAO
+    unsigned int cubeVAO, cubeVBO;
+    glGenVertexArrays(1, &cubeVAO);
+    glGenBuffers(1, &cubeVBO);
+    glBindVertexArray(cubeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+
+    // plane VAO
+    unsigned int planeVAO, planeVBO;
+    glGenVertexArrays(1, &planeVAO);
+    glGenBuffers(1, &planeVBO);
+    glBindVertexArray(planeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+
+    // load textures
+    // -------------
+    unsigned int cubeTexture = loadTexture("resources/textures/marble.jpg");
+    unsigned int floorTexture = loadTexture("resources/textures/metal.png");
+
+    // shader configuration
+    // --------------------
+    shader.use();
+    shader.setInt("texture1", 0);
 
     // -------------------------------------------------------------------------------------------------------------------------------------
     // draw in wireframe polygons.
@@ -216,128 +235,77 @@ int main() {
         // rendering
         // -------------------------------------------------------------------------------------------------------------------------------------
         // clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor. 
-        glClearColor(0.01f, 0.01f, 0.01f, 0.6f);                           // !state-setting function
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);             // !state-using function
+        glClearColor(0.01f, 0.01f, 0.01f, 0.6f);                                                // !state-setting function
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);             // !state-using function
 
-        // Transformation matrices
-        // Cannot be computed in advance (before the while loop)
+        glStencilMask(0x00);
         
-        
-        // -------------------------------------------------------------------------------------------------------------------------------------
-        // use shader program to render object
-
-        //lightPos.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        //lightPos.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
-
-        //lightDir.x = 2.f * sin(static_cast<float>(glfwGetTime()) * 2.f);
-        //lightDir.y = cos(static_cast<float>(glfwGetTime()) / 2.0f);
-
-        modelShader.use();
-
-        modelShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        modelShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-        modelShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-        modelShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-        // light
-        modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-        modelShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-        modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        modelShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);
-
-        modelShader.setVec3("light.direction", lightDir.x, lightDir.y, lightDir.z);
-
-        // light covers distance of 50
-        modelShader.setFloat("light.constant", 1.0f);
-        modelShader.setFloat("light.linear", 0.07f);
-        modelShader.setFloat("light.quadratic", 0.017f);
-
-        modelShader.setFloat("light.innerCutOff", glm::cos(glm::radians(12.5f)));
-        modelShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-
-        // light points
-        modelShader.setFloat("pointLights[0].constant", lightPoints[0].constant);
-        modelShader.setFloat("pointLights[1].constant", lightPoints[1].constant);
-        modelShader.setFloat("pointLights[2].constant", lightPoints[2].constant);
-        modelShader.setFloat("pointLights[3].constant", lightPoints[3].constant);
-
-        modelShader.setFloat("pointLights[0].linear", lightPoints[0].linear);
-        modelShader.setFloat("pointLights[1].linear", lightPoints[1].linear);
-        modelShader.setFloat("pointLights[2].linear", lightPoints[2].linear);
-        modelShader.setFloat("pointLights[3].linear", lightPoints[3].linear);
-
-        modelShader.setFloat("pointLights[0].quadratic", lightPoints[0].quadratic);
-        modelShader.setFloat("pointLights[1].quadratic", lightPoints[1].quadratic);
-        modelShader.setFloat("pointLights[2].quadratic", lightPoints[2].quadratic);
-        modelShader.setFloat("pointLights[3].quadratic", lightPoints[3].quadratic);
-
-        modelShader.setVec3("pointLights[0].ambient", lightPoints[0].ambient);
-        modelShader.setVec3("pointLights[1].ambient", lightPoints[1].ambient);
-        modelShader.setVec3("pointLights[2].ambient", lightPoints[2].ambient);
-        modelShader.setVec3("pointLights[3].ambient", lightPoints[3].ambient);
-
-        modelShader.setVec3("pointLights[0].diffuse", lightPoints[0].diffuse);
-        modelShader.setVec3("pointLights[1].diffuse", lightPoints[1].diffuse);
-        modelShader.setVec3("pointLights[2].diffuse", lightPoints[2].diffuse);
-        modelShader.setVec3("pointLights[3].diffuse", lightPoints[3].diffuse);
-
-        modelShader.setVec3("pointLights[0].specular", lightPoints[0].specular);
-        modelShader.setVec3("pointLights[1].specular", lightPoints[1].specular);
-        modelShader.setVec3("pointLights[2].specular", lightPoints[2].specular);
-        modelShader.setVec3("pointLights[3].specular", lightPoints[3].specular);
-
-        modelShader.setVec3("pointLights[0].position", lightPoints[0].position);
-        modelShader.setVec3("pointLights[1].position", lightPoints[1].position);
-        modelShader.setVec3("pointLights[2].position", lightPoints[2].position);
-        modelShader.setVec3("pointLights[3].position", lightPoints[3].position);
-
-        // material
-        modelShader.setFloat("material.shininess", 16.f);
-
-        modelShader.setVec3("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
-
+        shader.use();
+        glm::mat4 modelMat = glm::mat4(1.0f);
         glm::mat4 viewMat = camera.getViewMatrix();
-        glm::mat4 projMat = glm::perspective(glm::radians(camera.Zoom), static_cast<float> (WIDTH) / static_cast<float> (HEIGHT), 0.1f, 100.f);
-        glm::mat4 modelMat = glm::mat4(1.f);
-
-        modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        modelMat = glm::scale(modelMat, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-
-        modelShader.setMat4("viewMat", viewMat);
-        modelShader.setMat4("projMat", projMat);
-        modelShader.setMat4("modelMat", modelMat);
-
-        bagModel.draw(modelShader);
-
-        // -------------------------------------------------------------------------------------------------------------------------------------
-
+        glm::mat4 projMat = glm::perspective(glm::radians(camera.Zoom), static_cast<float>(WIDTH) / static_cast<float>(HEIGHT), 0.1f, 100.0f);
+        shader.setMat4("viewMat", viewMat);
+        shader.setMat4("projMat", projMat);
         
+        // floor
+        shader.setMat4("modelMat", modelMat);
 
-        lightShader.use();
-        lightShader.setMat4("viewMat", viewMat);
-        lightShader.setMat4("projMat", projMat);
+        glStencilMask(0x00);
+        // floor
+        glBindVertexArray(planeVAO);
+        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        shader.setMat4("modelMat", modelMat);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
 
-        /*
-        glBindVertexArray(lightVAO);
+        // 1st. render pass, draw objects as normal, writing to the stencil buffer
+        // --------------------------------------------------------------------
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilMask(0xFF);
+        // cubes
+        glBindVertexArray(cubeVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        modelMat = glm::translate(modelMat, glm::vec3(-1.0f, 0.0f, -1.0f));
+        shader.setMat4("modelMat", modelMat);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        modelMat = glm::mat4(1.0f);
+        modelMat = glm::translate(modelMat, glm::vec3(2.0f, 0.0f, 0.0f));
+        shader.setMat4("modelMat", modelMat);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        */
+        // 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.
+        // Because the stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are not drawn, thus only drawing 
+        // the objects' size differences, making it look like borders.
+        // -----------------------------------------------------------------------------------------------------------------------------
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        glStencilMask(0x00);
+        glDisable(GL_DEPTH_TEST);
+        stencilShader.use();
+        stencilShader.setMat4("viewMat", viewMat);
+        stencilShader.setMat4("projMat", projMat);
 
+        float scale = 1.1f;
+        // cubes
+        glBindVertexArray(cubeVAO);
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        modelMat = glm::mat4(1.0f);
+        modelMat = glm::translate(modelMat, glm::vec3(-1.0f, 0.0f, -1.0f));
+        modelMat = glm::scale(modelMat, glm::vec3(scale, scale, scale));
+        stencilShader.setMat4("modelMat", modelMat);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        modelMat = glm::mat4(1.0f);
+        modelMat = glm::translate(modelMat, glm::vec3(2.0f, 0.0f, 0.0f));
+        modelMat = glm::scale(modelMat, glm::vec3(scale, scale, scale));
+        stencilShader.setMat4("modelMat", modelMat);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glStencilMask(0xFF);
+        glStencilFunc(GL_ALWAYS, 0, 0xFF);
+        glEnable(GL_DEPTH_TEST);
 
-        for (unsigned int i = 0; i < 4; i++)
-        {
-            modelMat = glm::mat4(1.0f);
-            modelMat = glm::translate(modelMat, lightPoints[i].position);
-            modelMat = glm::scale(modelMat, glm::vec3(0.4f)); // a smaller cube
-            float angle = 20.0f * i;
-            modelMat = glm::rotate(modelMat, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            lightShader.setMat4("modelMat", modelMat);
-            lightShader.setVec3("lightColor", lightPoints[i].ambient);
-
-            glBindVertexArray(lightVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-
+        glBindVertexArray(0);
+        
 
         // swap the color buffer
         // -------------------------------------------------------------------------------------------------------------------------------------
@@ -353,12 +321,54 @@ int main() {
 
     //  de-allocate all resources
     // -------------------------------------------------------------------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &lightVAO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &cubeVAO);
+    glDeleteVertexArrays(1, &planeVAO);
+    glDeleteBuffers(1, &cubeVBO);
+    glDeleteBuffers(1, &planeVBO);
 
     glfwTerminate();
     return 0;
 }
+
+// -------------------------------------------------------------------------------------------------------------------------------------
+unsigned int loadTexture(const char* path) {
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cerr << "ERROR::TEXTURE::CANNOT LOAD TEXTURE" << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
+}
+
 
 // -------------------------------------------------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {

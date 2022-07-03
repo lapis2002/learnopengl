@@ -181,10 +181,14 @@
     <None Include="resources\backpack\backpack.mtl" />
     <None Include="shaders\cubeShader.frag" />
     <None Include="shaders\cubeShader.vert" />
+    <None Include="shaders\depthTesting.frag" />
+    <None Include="shaders\depthTesting.vert" />
     <None Include="shaders\lightSourceShader.frag" />
     <None Include="shaders\lightSourceShader.vert" />
     <None Include="shaders\modelLoaderShader.frag" />
     <None Include="shaders\modelLoaderShader.vert" />
+    <None Include="shaders\singleColorShader.frag" />
+    <None Include="shaders\singleColorShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\backpack\ao.jpg" />

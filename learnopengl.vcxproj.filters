@@ -61,6 +61,10 @@
     </None>
     <None Include="shaders\modelLoaderShader.vert" />
     <None Include="shaders\modelLoaderShader.frag" />
+    <None Include="shaders\depthTesting.vert" />
+    <None Include="shaders\depthTesting.frag" />
+    <None Include="shaders\singleColorShader.vert" />
+    <None Include="shaders\singleColorShader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\awesomeface.png">
