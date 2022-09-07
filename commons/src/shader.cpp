@@ -20,29 +20,45 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 	vertexShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fragmentShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	
+	// Read vertex shader
 	try {
 		// open file
 		vertexShaderFile.open(vertexShaderPath);
-		fragmentShaderFile.open(fragmentShaderPath);
 
-		std::stringstream vertexStream, fragmentStream;
+		std::stringstream vertexStream;
 
 		// read the file buffer content into streams
 		vertexStream << vertexShaderFile.rdbuf();
-		fragmentStream << fragmentShaderFile.rdbuf();
 
 		// close the file handle
 		vertexShaderFile.close();
-		fragmentShaderFile.close();
 
 		// convert stream into string
 		vertexCode = vertexStream.str();
+	}
+	catch (std::ifstream::failure e) {
+		std::cout << "ERROR::VERTEX_SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+	}
+	
+	// Read Fragment Shader
+	try {
+		// open file
+		fragmentShaderFile.open(fragmentShaderPath);
+
+		std::stringstream fragmentStream;
+
+		// read the file buffer content into streams
+		fragmentStream << fragmentShaderFile.rdbuf();
+
+		// close the file handle
+		fragmentShaderFile.close();
+
+		// convert stream into string
 		fragmentCode = fragmentStream.str();
 	}
 	catch (std::ifstream::failure e) {
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+		std::cout << "ERROR::FRAGMENT_SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 	}
-	
 
 	const char* vertexShaderCode = vertexCode.c_str();
 	const char* fragmentShaderCode = fragmentCode.c_str();

@@ -1,3 +1,7 @@
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
 #include "stb_image.h"
@@ -78,6 +82,16 @@ float planeVertices[] = {
      5.0f, -0.5f, -5.0f,  2.0f, 2.0f
 };
 
+float vegVertices[] = {
+    // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+    0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+    0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+    1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+    0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+    1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+    1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+};
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
@@ -114,11 +128,13 @@ struct LightPoint {
 };
 
 LightPoint lightPoints[NR_POINT_LIGHTS] = {
-     LightPoint(glm::vec3(1.f, 0.5f, 0.2f),   glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.7f,  0.2f,  2.f), 1.f, 0.9f, 1.6f),
+     LightPoint(glm::vec3(1.f, 0.5f, 0.2f),  glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.7f,  0.2f,  2.f), 1.f, 0.9f, 1.6f),
      LightPoint(glm::vec3(0.2f, 0.8f, 0.6f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(2.3f, -3.3f, -4.f), 1.f, 0.7f, 1.8f),
      LightPoint(glm::vec3(0.7f, 0.7f, 0.1f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(-4.f,  2.f, -7.f),  1.f, 0.09f, 0.032f),
      LightPoint(glm::vec3(0.2f, 0.6f, 0.8f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f,  2.f, -3.f),   1.f, 0.14f, 0.07f)
 };
+
+std::vector<glm::vec3> vegPos;
 
 int main() {
     glfwInit();
@@ -163,17 +179,15 @@ int main() {
     // configure global opengl state
     // -------------------------------------------------------------------------------------------------------------------------------------
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    stbi_set_flip_vertically_on_load(true); // OpenGL 0.0 coordinate on the y-axis to be on the bottom side but img usually top of y axis
+    //stbi_set_flip_vertically_on_load(true); // OpenGL 0.0 coordinate on the y-axis to be on the bottom side but img usually top of y axis
 
     // SHADER
     // -------------------------------------------------------------------------------------------------------------------------------------
     Shader shader = Shader("shaders/depthTesting.vert", "shaders/depthTesting.frag");
-    Shader stencilShader = Shader("shaders/depthTesting.vert", "shaders/singleColorShader.frag");
+    Shader blendingShader = Shader("shaders/blendingShader.vert", "shaders/blendingShader.frag");
 
     // cube VAO
     unsigned int cubeVAO, cubeVBO;
@@ -201,10 +215,24 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glBindVertexArray(0);
 
+    // vegetable VAO
+    unsigned int vegVAO, vegVBO;
+    glGenVertexArrays(1, &vegVAO);
+    glGenBuffers(1, &vegVBO);
+    glBindVertexArray(vegVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, vegVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vegVertices), &vegVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+
     // load textures
     // -------------
     unsigned int cubeTexture = loadTexture("resources/textures/marble.jpg");
     unsigned int floorTexture = loadTexture("resources/textures/metal.png");
+    unsigned int vegTexture = loadTexture("resources/textures/blending_transparent_window.png");
 
     // shader configuration
     // --------------------
@@ -222,6 +250,25 @@ int main() {
     // unbind VAO
     glBindVertexArray(0);
 
+    // sort it manually but we should sort it based on its distance from the window to the camera pos 
+    // (use glm::length2 - calculate the square length & map to store the position alphabetically)
+
+    vegPos.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
+    vegPos.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
+    vegPos.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
+    vegPos.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
+    vegPos.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
+
+
+    // ImgUI
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+    
     // -------------------------------------------------------------------------------------------------------------------------------------
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
@@ -236,10 +283,13 @@ int main() {
         // -------------------------------------------------------------------------------------------------------------------------------------
         // clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor. 
         glClearColor(0.01f, 0.01f, 0.01f, 0.6f);                                                // !state-setting function
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);             // !state-using function
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);             // !state-using function
 
-        glStencilMask(0x00);
-        
+        // ImGui
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         shader.use();
         glm::mat4 modelMat = glm::mat4(1.0f);
         glm::mat4 viewMat = camera.getViewMatrix();
@@ -256,12 +306,7 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, floorTexture);
         shader.setMat4("modelMat", modelMat);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        glBindVertexArray(0);
 
-        // 1st. render pass, draw objects as normal, writing to the stencil buffer
-        // --------------------------------------------------------------------
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF);
         // cubes
         glBindVertexArray(cubeVAO);
         glActiveTexture(GL_TEXTURE0);
@@ -274,39 +319,29 @@ int main() {
         shader.setMat4("modelMat", modelMat);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        // 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.
-        // Because the stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are not drawn, thus only drawing 
-        // the objects' size differences, making it look like borders.
-        // -----------------------------------------------------------------------------------------------------------------------------
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        glStencilMask(0x00);
-        glDisable(GL_DEPTH_TEST);
-        stencilShader.use();
-        stencilShader.setMat4("viewMat", viewMat);
-        stencilShader.setMat4("projMat", projMat);
-
-        float scale = 1.1f;
-        // cubes
-        glBindVertexArray(cubeVAO);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);
-        modelMat = glm::mat4(1.0f);
-        modelMat = glm::translate(modelMat, glm::vec3(-1.0f, 0.0f, -1.0f));
-        modelMat = glm::scale(modelMat, glm::vec3(scale, scale, scale));
-        stencilShader.setMat4("modelMat", modelMat);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        modelMat = glm::mat4(1.0f);
-        modelMat = glm::translate(modelMat, glm::vec3(2.0f, 0.0f, 0.0f));
-        modelMat = glm::scale(modelMat, glm::vec3(scale, scale, scale));
-        stencilShader.setMat4("modelMat", modelMat);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-        glStencilMask(0xFF);
-        glStencilFunc(GL_ALWAYS, 0, 0xFF);
-        glEnable(GL_DEPTH_TEST);
+        blendingShader.use();
+        blendingShader.setMat4("viewMat", viewMat);
+        blendingShader.setMat4("projMat", projMat);
+        glBindVertexArray(vegVAO);
+        glBindTexture(GL_TEXTURE_2D, vegTexture);
+        for (unsigned int i = 0; i < vegPos.size(); i++)
+        {
+            modelMat = glm::mat4(1.0f);
+            modelMat = glm::translate(modelMat, vegPos[i]);
+            blendingShader.setMat4("modelMat", modelMat);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
 
         glBindVertexArray(0);
         
+        // ImGui
+        ImGui::Begin("Test ImGui");
+        ImGui::Text("ImGui");
+        ImGui::End();
 
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
         // swap the color buffer
         // -------------------------------------------------------------------------------------------------------------------------------------
         // swap the back buffer to the front buffer so the image can be displayed without still being rendered to, 
@@ -319,6 +354,11 @@ int main() {
         glfwPollEvents();
     }
 
+    //  End ImGui process
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    
     //  de-allocate all resources
     // -------------------------------------------------------------------------------------------------------------------------------------
     glDeleteVertexArrays(1, &cubeVAO);
@@ -352,8 +392,11 @@ unsigned int loadTexture(const char* path) {
         glGenerateMipmap(GL_TEXTURE_2D);
 
         // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // CLAMP_TO_EDGE to prevent the semi-transparent colored border when interpolating
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         // set texture filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
